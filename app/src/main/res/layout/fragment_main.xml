@@ -1,0 +1,10 @@
+<GridView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/grid_view_movies"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_column="10"
+    android:layout_row="13"
+    android:background="#700f0f"
+    android:clipToPadding="false"
+    android:drawSelectorOnTop="true"
+    android:numColumns="auto_fit" />
