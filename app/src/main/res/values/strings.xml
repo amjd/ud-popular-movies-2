@@ -5,6 +5,10 @@
     <string name="title_activity_movie_detail">MovieDetailActivity</string>
     <string name="action_settings">Settings</string>
     <string name="overviewHeading">Overview</string>
+    <string name="trailersHeading">Trailers</string>
+    <string name="reviewsHeading">Reviews</string>
     <string name="releaseText">Released on: </string>
     <string name="movieDetailActivityTitle">Movie Title</string>
+    <string name="trailer_preview">Trailer preview</string>
+    <string name="review_by_title">Review by:</string>
 </resources>

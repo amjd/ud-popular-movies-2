@@ -15,6 +15,8 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.example.amjad.popularmovies.adapter.MovieAdapter;
+import com.example.amjad.popularmovies.model.Movie;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -35,7 +37,7 @@ public class MainActivityFragment extends Fragment {
     private static final String API_KEY = "458b917560061314b5ec5669c7555d84";
     private final String LOG_TAG = MainActivityFragment.class.getSimpleName();
     private String mSelectedMode;
-    private MovieAdaptor mMovieAdaptor;
+    private MovieAdapter mMovieAdapter;
 
     public MainActivityFragment() {
         mSelectedMode = "popularity";
@@ -46,17 +48,18 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         Context context = getContext();
-        mMovieAdaptor = new MovieAdaptor(context, new ArrayList<Movie>());
+
+        mMovieAdapter = new MovieAdapter(context, new ArrayList<Movie>());
 
         GridView gridView = (GridView) rootView.findViewById(R.id.grid_view_movies);
-        gridView.setAdapter(mMovieAdaptor);
+        gridView.setAdapter(mMovieAdapter);
 
         loadMovies(mSelectedMode);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Movie movie = mMovieAdaptor.getItem(position);
+                Movie movie = mMovieAdapter.getItem(position);
                 //Toast.makeText(getActivity(), "Movie title:" + movie.title, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), MovieDetailActivity.class)
                         .putExtra("movieDetail", movie);
@@ -128,14 +131,14 @@ public class MainActivityFragment extends Fragment {
                         );
                     }
 
-                    mMovieAdaptor.clear();
+                    mMovieAdapter.clear();
                     for (Movie movie : movieList) {
                         if (movie != null) {
                             Log.v(LOG_TAG, "POST EXECUTE IMAGE URLS" + movie);
-                            mMovieAdaptor.add(movie);
+                            mMovieAdapter.add(movie);
                         }
                     }
-                    mMovieAdaptor.notifyDataSetChanged();
+                    mMovieAdapter.notifyDataSetChanged();
 
                 } catch (JSONException e) {
                     Log.e(LOG_TAG, "Error", e);

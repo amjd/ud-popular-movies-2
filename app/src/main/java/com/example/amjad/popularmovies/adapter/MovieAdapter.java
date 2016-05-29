@@ -1,4 +1,4 @@
-package com.example.amjad.popularmovies;
+package com.example.amjad.popularmovies.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
+import com.example.amjad.popularmovies.R;
+import com.example.amjad.popularmovies.model.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -16,11 +18,11 @@ import java.util.ArrayList;
  * Created by amjad on 27/3/16.
  */
 
-public class MovieAdaptor extends ArrayAdapter<Movie> {
-    private static final String LOG_TAG = MovieAdaptor.class.getSimpleName();
+public class MovieAdapter extends ArrayAdapter<Movie> {
+    private static final String LOG_TAG = MovieAdapter.class.getSimpleName();
     Context context;
 
-    public MovieAdaptor(Context context, ArrayList<Movie> movies) {
+    public MovieAdapter(Context context, ArrayList<Movie> movies) {
         super(context, R.layout.grid_item_movie, movies);
         this.context = context;
 
@@ -40,7 +42,7 @@ public class MovieAdaptor extends ArrayAdapter<Movie> {
         }
 
         Picasso.with(context)
-                .load(movie.posterUrl)
+                .load(movie.getPosterUrl())
                 .into((ImageView) convertView);
 
         return convertView;

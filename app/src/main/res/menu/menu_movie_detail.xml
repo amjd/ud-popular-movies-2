@@ -2,9 +2,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.amjad.popularmovies.MainActivity">
+
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:id="@+id/action_favorite_add"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_favorite_add" />
+    <item
+        android:id="@+id/action_share"
+        app:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_share" />
 </menu>
