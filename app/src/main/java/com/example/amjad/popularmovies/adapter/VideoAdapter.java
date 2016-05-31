@@ -20,7 +20,7 @@ public class VideoAdapter extends ArrayAdapter<Video> {
     private LayoutInflater inflater;
 
     public VideoAdapter(Context context, ArrayList<Video> videos) {
-        super(context, R.layout.list_item_video, videos);
+        super(context, R.layout.item_video, videos);
         this.context = context;
         inflater = LayoutInflater.from(context);
     }
@@ -32,7 +32,7 @@ public class VideoAdapter extends ArrayAdapter<Video> {
 
         // Adapters recycle views to AdapterViews.
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_video, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_video, parent, false);
         }
 
         if(video != null) {

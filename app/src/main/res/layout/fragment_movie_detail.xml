@@ -124,6 +124,15 @@
                     android:textSize="20sp" />
 
 
+                <TextView
+                    android:id="@+id/videoPlaceholderText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/video_placeholder_text"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="14.5sp"
+                    android:layout_marginTop="10dp" />
+
                 <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -154,6 +163,15 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@android:color/background_dark"
                     android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/reviewPlaceholderText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/review_placeholder_text"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="14.5sp"
+                    android:layout_marginTop="10dp" />
 
                 <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
                     android:layout_width="wrap_content"

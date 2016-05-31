@@ -11,4 +11,10 @@
     <string name="movieDetailActivityTitle">Movie Title</string>
     <string name="trailer_preview">Trailer preview</string>
     <string name="review_by_title">Review by:</string>
+    <string name="review_placeholder_text">Loading reviews...</string>
+    <string name="video_placeholder_text">Loading trailers...</string>
+    <string name="no_videos_found">No videos found.</string>
+    <string name="no_reviews_found">No reviews found.</string>
+    <string name="error_fetching_reviews">Error fetching reviews.</string>
+    <string name="error_fetching_trailers">Error fetching trailers.</string>
 </resources>

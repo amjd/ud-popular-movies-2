@@ -9,11 +9,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +22,6 @@ import com.example.amjad.popularmovies.adapter.ReviewAdapter;
 import com.example.amjad.popularmovies.adapter.VideoAdapter;
 import com.example.amjad.popularmovies.model.Review;
 import com.example.amjad.popularmovies.model.Video;
-import com.example.amjad.popularmovies.Utility;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.squareup.picasso.Picasso;
@@ -43,6 +42,7 @@ import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 
 public class MovieDetailActivityFragment extends Fragment {
     private Movie mMovie;
+    private Context mContext;
     private ReviewAdapter mReviewAdapter;
     private VideoAdapter mVideoAdapter;
 
@@ -68,13 +68,13 @@ public class MovieDetailActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
-        Context context = getActivity();
         Bundle arguments = getArguments();
+        mContext = getActivity();
 
         mMovie = getActivity().getIntent().getExtras().getParcelable("movieDetail");
 
         // Create an adapter for reviews, and bind it with corresponding layout element
-        mReviewAdapter = new ReviewAdapter(context, new ArrayList<Review>());
+        mReviewAdapter = new ReviewAdapter(mContext, new ArrayList<Review>());
         ExpandableHeightListView reviewListView = (ExpandableHeightListView) rootView.findViewById(R.id.listMovieReviews);
         reviewListView.setAdapter(mReviewAdapter);
         reviewListView.setExpanded(true);
@@ -89,7 +89,7 @@ public class MovieDetailActivityFragment extends Fragment {
 
 
         // Create an adapter for videos, and bind it with corresponding layout element
-        mVideoAdapter = new VideoAdapter(context, new ArrayList<Video>());
+        mVideoAdapter = new VideoAdapter(mContext, new ArrayList<Video>());
         ExpandableHeightListView videoListView = (ExpandableHeightListView) rootView.findViewById(R.id.listMovieVideos);
         videoListView.setExpanded(true);
         videoListView.setAdapter(mVideoAdapter);
@@ -101,11 +101,10 @@ public class MovieDetailActivityFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Video video = mVideoAdapter.getItem(i);
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("http://www.youtube.com/watch?v=" + video.getKey()));
+                intent.setData(Uri.parse(video.getVideoUrl()));
                 startActivity(intent);
             }
         });
-
 
         if (mMovie != null)
         {
@@ -121,7 +120,7 @@ public class MovieDetailActivityFragment extends Fragment {
 
             ((TextView) rootView.findViewById(R.id.movieTitle)).setText(mMovie.getTitle());
             ((TextView) rootView.findViewById(R.id.overviewText)).setText(mMovie.getOverview());
-            ((TextView) rootView.findViewById(R.id.rating)).setText(String.format("%s %.1f", "Rating:", mMovie.getVoteAverage()));
+            ((TextView) rootView.findViewById(R.id.rating)).setText(String.format("Rating: %.1f/10", mMovie.getVoteAverage()));
 
             ImageView movieThumbnail = (ImageView) rootView.findViewById(R.id.moviePosterDetail);
             Picasso.with(getContext()).load(mMovie.getPosterUrl()).into(movieThumbnail);
@@ -135,6 +134,27 @@ public class MovieDetailActivityFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.menu_movie_detail, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        int id = item.getItemId();
+
+            if(id == R.id.action_share)
+            {
+                if(!mVideoAdapter.isEmpty())
+                {
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, mVideoAdapter.getItem(0).getVideoUrl());
+                    startActivity(Intent.createChooser(shareIntent, "Share trailer using"));
+                }
+                else {
+                    Toast.makeText(mContext, "No trailers available to share", Toast.LENGTH_SHORT);
+                }
+            }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void fetchReviews() {
@@ -168,6 +188,22 @@ public class MovieDetailActivityFragment extends Fragment {
                     }
                     mReviewAdapter.notifyDataSetChanged();
 
+                    if (mReviewAdapter.isEmpty()) {
+                        try {
+                            TextView reviewPlaceholderText = (TextView) getView().findViewById(R.id.reviewPlaceholderText);
+                            reviewPlaceholderText.setText(R.string.no_reviews_found);
+                        } catch(NullPointerException ne) {
+                            Log.v(LOG_TAG, "Error ", ne);
+                        }
+                    }
+                    else {
+                        try {
+                            TextView reviewPlaceholderText = (TextView) getView().findViewById(R.id.reviewPlaceholderText);
+                            reviewPlaceholderText.setVisibility(View.GONE);
+                        } catch(NullPointerException ne) {
+                            Log.v(LOG_TAG, "Error ", ne);
+                        }
+                    }
                 } catch (JSONException e) {
                     Log.e(LOG_TAG, "Error", e);
                 }
@@ -175,11 +211,18 @@ public class MovieDetailActivityFragment extends Fragment {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseBody, Throwable error) {
-                Toast.makeText(getContext(), "Error loading reviews", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Error loading reviews", Toast.LENGTH_SHORT).show();
+                try {
+                    TextView reviewPlaceholderText = (TextView) getView().findViewById(R.id.reviewPlaceholderText);
+                    reviewPlaceholderText.setText("Couldn't retrieve reviews.");
+                } catch(NullPointerException ne) {
+                    Log.v(LOG_TAG, "Error ", ne);
+                }
             }
 
 
         });
+
     }
 
     private void fetchVideos() {
@@ -215,6 +258,23 @@ public class MovieDetailActivityFragment extends Fragment {
                     }
                     mVideoAdapter.notifyDataSetChanged();
 
+                    if (mVideoAdapter.isEmpty()) {
+                        try {
+                            TextView videoPlaceholderText = (TextView) getView().findViewById(R.id.videoPlaceholderText);
+                            videoPlaceholderText.setText(R.string.no_reviews_found);
+                        } catch(NullPointerException ne) {
+                            Log.v(LOG_TAG, "Error ", ne);
+                        }
+                    }
+                    else {
+                        try {
+                            TextView videoPlaceholderText = (TextView) getView().findViewById(R.id.videoPlaceholderText);
+                            videoPlaceholderText.setVisibility(View.GONE);
+                        } catch(NullPointerException ne) {
+                            Log.v(LOG_TAG, "Error ", ne);
+                        }
+                    }
+
                 } catch (JSONException e) {
                     Log.e(LOG_TAG, "Error", e);
                 }
@@ -222,10 +282,17 @@ public class MovieDetailActivityFragment extends Fragment {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseBody, Throwable error) {
-                Toast.makeText(getContext(), "Error loading trailers", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Error loading trailers", Toast.LENGTH_SHORT).show();
+                try {
+                    TextView videoPlaceholderText = (TextView) getView().findViewById(R.id.videoPlaceholderText);
+                    videoPlaceholderText.setText("Couldn't retrieve trailers.");
+                } catch(NullPointerException ne) {
+                    Log.v(LOG_TAG, "Error ", ne);
+                }
             }
 
 
         });
+
     }
 }

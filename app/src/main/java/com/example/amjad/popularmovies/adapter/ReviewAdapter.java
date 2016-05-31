@@ -5,12 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.amjad.popularmovies.R;
 import com.example.amjad.popularmovies.model.Review;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -20,7 +18,7 @@ public class ReviewAdapter extends ArrayAdapter<Review> {
     private LayoutInflater inflater;
 
     public ReviewAdapter(Context context, ArrayList<Review> reviews) {
-        super(context, R.layout.list_item_review, reviews);
+        super(context, R.layout.item_review, reviews);
         this.context = context;
         inflater = LayoutInflater.from(context);
     }
@@ -32,7 +30,7 @@ public class ReviewAdapter extends ArrayAdapter<Review> {
 
         // Adapters recycle views to AdapterViews.
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_review, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_review, parent, false);
         }
 
         if (review != null) {
@@ -41,6 +39,7 @@ public class ReviewAdapter extends ArrayAdapter<Review> {
 
             TextView contentTextView = (TextView) convertView.findViewById(R.id.movie_review_content);
             contentTextView.setText(review.getReview());
+
         }
 
         return convertView;

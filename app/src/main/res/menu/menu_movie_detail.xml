@@ -4,11 +4,13 @@
     tools:context="com.example.amjad.popularmovies.MainActivity">
 
     <item
-        android:id="@+id/action_favorite_add"
+        android:id="@+id/action_favorite"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_favorite_add" />
+        android:title="Add favorite"
+        android:icon="@drawable/ic_menu_favorite_add" />
     <item
         android:id="@+id/action_share"
         app:showAsAction="ifRoom"
-        android:icon="@android:drawable/ic_menu_share" />
+        android:title="Share trailer"
+        android:icon="@drawable/ic_menu_share" />
 </menu>

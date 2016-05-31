@@ -37,18 +37,6 @@ public class Video implements Parcelable {
         return this.name;
     }
 
-    public String getSite() {
-        return this.site;
-    }
-
-    public int getSize() {
-        return this.size;
-    }
-
-    public String getType() {
-        return this.type;
-    }
-
     public String getImageUrl() {
         return this.imageUrl;
     }

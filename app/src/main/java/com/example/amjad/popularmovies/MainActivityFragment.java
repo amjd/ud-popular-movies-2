@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.amjad.popularmovies.adapter.MovieAdapter;
@@ -86,10 +87,34 @@ public class MainActivityFragment extends Fragment {
 
         if (id == R.id.action_sort_popularity && !mSelectedMode.equals("popularity")) {
             mSelectedMode = "popularity";
+            try {
+                GridView gridView = (GridView) getView().findViewById(R.id.grid_view_movies);
+                gridView.setVisibility(View.GONE);
+            } catch(NullPointerException ne) {
+                Log.e(LOG_TAG, "Error " + ne);
+            }
+            try {
+                TextView loadingScreenSubtitle = (TextView) getView().findViewById(R.id.loadingScreenSubtitle);
+                loadingScreenSubtitle.setText("Loading movies...");
+            } catch(NullPointerException ne) {
+                Log.e(LOG_TAG, "Error " + ne);
+            }
             loadMovies(mSelectedMode);
             return true;
         } else if (id == R.id.action_sort_rating && !mSelectedMode.equals("rating")) {
             mSelectedMode = "rating";
+            try {
+                GridView gridView = (GridView) getView().findViewById(R.id.grid_view_movies);
+                gridView.setVisibility(View.GONE);
+            } catch(NullPointerException ne) {
+                Log.e(LOG_TAG, "Error " + ne);
+            }
+            try {
+                TextView loadingScreenSubtitle = (TextView) getView().findViewById(R.id.loadingScreenSubtitle);
+                loadingScreenSubtitle.setText("Loading movies...");
+            } catch(NullPointerException ne) {
+                Log.e(LOG_TAG, "Error " + ne);
+            }
             loadMovies(mSelectedMode);
             return true;
         }
@@ -134,11 +159,17 @@ public class MainActivityFragment extends Fragment {
                     mMovieAdapter.clear();
                     for (Movie movie : movieList) {
                         if (movie != null) {
-                            Log.v(LOG_TAG, "POST EXECUTE IMAGE URLS" + movie);
+                            Log.v(LOG_TAG, "Adding movie to adapter: " + movie);
                             mMovieAdapter.add(movie);
                         }
                     }
                     mMovieAdapter.notifyDataSetChanged();
+                    try {
+                        GridView gridView = (GridView) getView().findViewById(R.id.grid_view_movies);
+                        gridView.setVisibility(View.VISIBLE);
+                    } catch(NullPointerException ne) {
+                        Log.e(LOG_TAG, "Error " + ne);
+                    }
 
                 } catch (JSONException e) {
                     Log.e(LOG_TAG, "Error", e);
@@ -148,8 +179,13 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseBody, Throwable error) {
                 Toast.makeText(getContext(), "Error loading movies", Toast.LENGTH_SHORT).show();
+                try {
+                    TextView loadingScreenSubtitle = (TextView) getView().findViewById(R.id.loadingScreenSubtitle);
+                    loadingScreenSubtitle.setText("Error loading movies. Please try again.");
+                } catch(NullPointerException ne) {
+                    Log.e(LOG_TAG, "Error " + ne);
+                }
             }
-
 
         });
     }

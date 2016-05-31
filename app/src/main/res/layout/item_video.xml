@@ -20,5 +20,5 @@
         android:id="@+id/movie_video_title"
         android:layout_marginTop="8dp"
         android:textColor="#424242"
-        android:textSize="16sp" />
+        android:textSize="15sp" />
 </LinearLayout>
