@@ -11,6 +11,9 @@ This app is the first project (P1) built as part of Udacity Android Nanodegree p
 - Picasso (by Square)
 - Android Async HTTP (by loopj)
 
+### Credits
+Movie icon by [Freepik](http://www.freepik.com)
+
 ### Author
 Amjad Ali
 
