@@ -1,0 +1,5 @@
+<root>
+  <item name='android.support.v4.app.Fragment android.view.View getView()'>
+    <annotation name='java.lang.annotation.Deprecated' />
+  </item>
+</root>

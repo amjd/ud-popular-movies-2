@@ -8,6 +8,8 @@ import android.os.Parcelable;
  */
 public class Movie implements Parcelable {
 
+    public static final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
+
     long id;
     String title;
     String overview;
@@ -20,41 +22,6 @@ public class Movie implements Parcelable {
     String backdropUrl;
     String posterUrl;
 
-    public static final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
-
-    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
-        @Override
-        public Movie createFromParcel(Parcel in) {
-            return new Movie(in);
-        }
-
-        @Override
-        public Movie[] newArray(int size) {
-            return new Movie[size];
-        }
-    };
-
-    public long getId() { return this.id; }
-
-    public String getTitle() {
-        return this.title;
-    }
-    
-    public String getOverview() {
-        return this.overview;
-    }
-    
-    public String getReleaseDate() {
-        return this.releaseDate;
-    }
-    
-    public double getVoteAverage() {
-        return this.voteAverage;
-    }
-    
-    public String getPosterUrl() {
-        return this.posterUrl;
-    }
 
     public Movie(long id, String title, String overview, String releaseDate, double popularity, double voteAverage, long voteCount, String backdropPath, String posterPath) {
         this.id = id;
@@ -102,5 +69,57 @@ public class Movie implements Parcelable {
         dest.writeLong(this.voteCount);
         dest.writeString(this.backdropPath);
         dest.writeString(this.posterPath);
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
+    public long getId() {
+        return this.id;
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+
+    public String getOverview() {
+        return this.overview;
+    }
+
+    public String getReleaseDate() {
+        return this.releaseDate;
+    }
+
+    public double getVoteAverage() {
+        return this.voteAverage;
+    }
+
+    public String getPoster() {
+        return this.posterPath;
+    }
+
+    public String getBackdrop() {
+        return this.backdropPath;
+    }
+
+    public long getVoteCount() {
+        return this.voteCount;
+    }
+
+    public double getPopularity() {
+        return this.popularity;
+    }
+
+    public String getPosterUrl() {
+        return this.posterUrl;
     }
 }

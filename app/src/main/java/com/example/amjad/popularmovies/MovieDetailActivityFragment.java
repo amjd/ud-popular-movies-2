@@ -3,6 +3,7 @@ package com.example.amjad.popularmovies;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -22,6 +23,8 @@ import com.example.amjad.popularmovies.adapter.ReviewAdapter;
 import com.example.amjad.popularmovies.adapter.VideoAdapter;
 import com.example.amjad.popularmovies.model.Review;
 import com.example.amjad.popularmovies.model.Video;
+import com.example.amjad.popularmovies.Utility.AddFavoriteMovieTask;
+import com.example.amjad.popularmovies.Utility.RemoveFavoriteMovieTask;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.squareup.picasso.Picasso;
@@ -134,24 +137,58 @@ public class MovieDetailActivityFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.menu_movie_detail, menu);
+        final MenuItem favoriteIcon = menu.findItem(R.id.action_favorite);
+        new AsyncTask<Void, Void, Boolean>() {
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                return Utility.isFavoriteMovie(getActivity(), mMovie.getId());
+            }
+
+            @Override
+            protected void onPostExecute(Boolean isFavorite) {
+                if (!isFavorite) {
+                    favoriteIcon.setIcon(R.drawable.ic_menu_favorite_add);
+                } else {
+                    favoriteIcon.setIcon(R.drawable.ic_menu_favorite_remove);
+                }
+            }
+        }.execute();
     }
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         int id = item.getItemId();
 
-            if(id == R.id.action_share)
-            {
+            if(id == R.id.action_share) {
                 if(!mVideoAdapter.isEmpty())
                 {
                     Intent shareIntent = new Intent(Intent.ACTION_SEND);
                     shareIntent.setType("text/plain");
                     shareIntent.putExtra(Intent.EXTRA_TEXT, mVideoAdapter.getItem(0).getVideoUrl());
-                    startActivity(Intent.createChooser(shareIntent, "Share trailer using"));
+                    startActivity(Intent.createChooser(shareIntent, "Share trailer"));
                 }
                 else {
                     Toast.makeText(mContext, "No trailers available to share", Toast.LENGTH_SHORT);
                 }
+            } else if (id == R.id.action_favorite) {
+                new AsyncTask<Void, Void, Boolean>() {
+                    @Override
+                    protected Boolean doInBackground(Void... params) {
+                        return Utility.isFavoriteMovie(getActivity(), mMovie.getId());
+                    }
+
+                    @Override
+                    protected void onPostExecute(Boolean isFavorite) {
+                        if (!isFavorite) {
+                            AddFavoriteMovieTask addFavoriteMovieTask = new AddFavoriteMovieTask(mMovie, item, getView(), getActivity());
+                            addFavoriteMovieTask.execute();
+                        } else {
+                            RemoveFavoriteMovieTask removeFavoriteMovieTask = new RemoveFavoriteMovieTask(mMovie, item, getView(), getActivity());
+                            removeFavoriteMovieTask.execute();
+                        }
+                    }
+                }.execute();
+
             }
 
         return super.onOptionsItemSelected(item);
