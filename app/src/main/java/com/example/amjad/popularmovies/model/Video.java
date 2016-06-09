@@ -5,6 +5,9 @@ import android.os.Parcelable;
 
 public class Video implements Parcelable {
 
+    public static final String VIDEO_IMAGE_URL = "http://img.youtube.com/vi/%s/0.jpg";
+    public static final String VIDEO_URL = "http://www.youtube.com/watch?v=%s";
+
     String id;
     String key;
     String name;
@@ -13,9 +16,6 @@ public class Video implements Parcelable {
     String type;
     String imageUrl;
     String videoUrl;
-
-    public static final String VIDEO_IMAGE_URL = "http://img.youtube.com/vi/%s/0.jpg";
-    public static final String VIDEO_URL = "http://www.youtube.com/watch?v=%s";
 
     public static final Creator<Video> CREATOR = new Creator<Video>() {
         @Override

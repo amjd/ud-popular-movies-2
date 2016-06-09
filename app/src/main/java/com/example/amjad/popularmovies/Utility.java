@@ -19,7 +19,7 @@ import com.example.amjad.popularmovies.model.Movie;
  * Created by amjad on 29/5/16.
  */
 public class Utility {
-    public static final String TAG = Utility.class.getSimpleName();
+    public static final String LOG_TAG = Utility.class.getSimpleName();
 
     public static boolean isFavoriteMovie(Context context, long id) {
         Cursor cursor = context.getContentResolver().query(
@@ -30,7 +30,7 @@ public class Utility {
             null
         );
 
-        Log.v(TAG, String.format("Number of rows in table: %d",cursor.getCount()));
+        Log.v(LOG_TAG, String.format("Number of matching rows in table: %d",cursor.getCount()));
 
         return cursor.getCount() > 0;
     }

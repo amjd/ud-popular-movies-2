@@ -37,7 +37,7 @@ public class MovieContract {
         public static final String COLUMN_VOTE_COUNT = "movieVoteCount";
         public static final String COLUMN_POPULARITY = "moviePopularity";
 
-        // Define a function to build a URI to find a specific movie by it's identifier
+        // Define a function to build a URI to find a specific movie by its identifier
         public static Uri buildMovieUri(long id){
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
